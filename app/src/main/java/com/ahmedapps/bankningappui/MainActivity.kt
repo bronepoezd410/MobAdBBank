@@ -130,10 +130,11 @@ fun HomeScreen() {
                 .padding(padding)
         ) {
 
-        WalletSection(walletAmount = null)
+        WalletSection()
         CardsSection()
         Spacer(modifier = Modifier.height(16.dp))
-        FinanceSection()
+
+            FinanceSection()
 
             val viewModel: CurrencyViewModel = viewModel()
             CurrenciesSection(viewModel = viewModel)

@@ -57,21 +57,6 @@ val items = listOf(
         )
     )
 
-fun logout() {
-    val firebaseAuth = FirebaseAuth.getInstance()
-    firebaseAuth.signOut()
-    val authStateListener = AuthStateListener {
-        if (it.currentUser == null) {
-            Log.d(TAG, "Inside sign out success")
-            BroBankAppRouter.navigateTo(Screen.LoginScreen)
-        } else {
-            Log.d(TAG, "Inside sign out is not complete")
-        }
-    }
-    firebaseAuth.addAuthStateListener(authStateListener)
-}
-
-
 @Composable
 fun BottomNavigationBar(selectedIndex: Int) {
     NavigationBar {
@@ -105,7 +90,19 @@ fun BottomNavigationBar(selectedIndex: Int) {
 
 
 
-
+fun logout() {
+    val firebaseAuth = FirebaseAuth.getInstance()
+    firebaseAuth.signOut()
+    val authStateListener = AuthStateListener {
+        if (it.currentUser == null) {
+            Log.d(TAG, "Inside sign out success")
+            BroBankAppRouter.navigateTo(Screen.LoginScreen)
+        } else {
+            Log.d(TAG, "Inside sign out is not complete")
+        }
+    }
+    firebaseAuth.addAuthStateListener(authStateListener)
+}
 
 
 

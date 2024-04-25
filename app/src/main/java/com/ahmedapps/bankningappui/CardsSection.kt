@@ -74,23 +74,27 @@ fun CardsSection() {
                         return@addSnapshotListener
                     }
 
-                    val cardsList = mutableListOf<Map<String, String>>()
+                    val cardsList = mutableListOf<Map<String, Any>>() // Изменили тип значения moneyAmount на Any
+
                     value?.documents?.forEach { document ->
-                        val cardData = hashMapOf<String, String>()
+                        val cardData = hashMapOf<String, Any>() // Изменили тип значения moneyAmount на Any
                         cardData["cardNumber"] = document["cardNumber"] as? String ?: ""
                         cardData["cardHolder"] = document["cardHolder"] as? String ?: ""
                         cardData["cardName"] = document["cardName"] as? String ?: ""
-                        cardData["moneyAmount"] = document["moneyAmount"] as? String ?: ""
+                        cardData["moneyAmount"] = (document["moneyAmount"] as? Number)?.toFloat() ?: 0.0f // Преобразовали в Float
                         cardData["cardType"] = document["cardType"] as? String ?: ""
                         cardsList.add(cardData)
+                    }
 
-                        creditCards = cardsList // Обновление состояния с данными кредитных карт
+                    creditCards = cardsList.map { cardData ->
+                        cardData.mapValues { it.value.toString() }
+                    }
 
                     }
                 }
             }
         }
-    }
+
 
     LazyRow {
         items(creditCards) { cardData ->
@@ -145,7 +149,7 @@ fun CardItem(
             )
 
             Text(
-                text = "$ ${cardData["moneyAmount"] ?: ""}",
+                text = "$ ${"%.2f".format(cardData["moneyAmount"]?.toFloatOrNull() ?: 0.0f)}",
                 color = Color.White,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold

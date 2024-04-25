@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,29 +33,35 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 
 @Composable
-fun WalletSection(walletAmount: String?) {
-    val walletAmountState = remember { mutableStateOf(walletAmount) }
+fun WalletSection() {
+    val walletAmountState = remember { mutableStateOf(0.0f) }
+    val coroutineScope = rememberCoroutineScope()
 
-    // Получаем информацию о кошельке текущего пользователя из базы данных
     LaunchedEffect(Unit) {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        if (userId != null) {
-            val userWalletRef = FirebaseFirestore.getInstance().collection("users").document(userId).collection("wallet").document("wallet_info")
+        coroutineScope.launch {
+            val userId = FirebaseAuth.getInstance().currentUser?.uid
+            if (userId != null) {
+                val userCreditCardsRef = FirebaseFirestore.getInstance().collection("users").document(userId).collection("creditCards")
 
-            userWalletRef.get()
-                .addOnSuccessListener { document ->
-                    val walletAmount = document.getString("amount")
-                    walletAmountState.value = walletAmount ?: "0" // Если информация о кошельке отсутствует, устанавливаем значение по умолчанию
+                try {
+                    val documents = userCreditCardsRef.get().await()
+                    var totalAmount = 0.0f
+                    for (document in documents) {
+                        val moneyAmount = document.getDouble("moneyAmount") ?: 0.0
+                        totalAmount += moneyAmount.toFloat()
+                    }
+                    walletAmountState.value = totalAmount
+                } catch (e: Exception) {
+                    Log.e(TAG, "Ошибка при получении информации о кредитных картах", e)
                 }
-                .addOnFailureListener { e ->
-                    Log.e(TAG, "Ошибка при получении информации о кошельке", e)
-                }
+            }
         }
     }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
