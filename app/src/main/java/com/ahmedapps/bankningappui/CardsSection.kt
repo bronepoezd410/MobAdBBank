@@ -27,17 +27,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ahmedapps.bankningappui.data.navigationdata.Card
 import com.ahmedapps.bankningappui.ui.theme.BlueEnd
 import com.ahmedapps.bankningappui.ui.theme.BlueStart
 import com.ahmedapps.bankningappui.ui.theme.GreenEnd
 import com.ahmedapps.bankningappui.ui.theme.GreenStart
-import com.ahmedapps.bankningappui.ui.theme.OrangeEnd
-import com.ahmedapps.bankningappui.ui.theme.OrangeStart
 import com.ahmedapps.bankningappui.ui.theme.PurpleEnd
 import com.ahmedapps.bankningappui.ui.theme.PurpleStart
 import com.google.firebase.auth.FirebaseAuth
