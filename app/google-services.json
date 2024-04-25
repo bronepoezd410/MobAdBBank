@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "575190013237",
+    "project_id": "brobank-bf1f9",
+    "storage_bucket": "brobank-bf1f9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:575190013237:android:2326fe2a16f8f1afec287c",
+        "android_client_info": {
+          "package_name": "com.ahmedapps.bankningappui"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYFFMO9uqXA1wBwRwoz3xcToh9skSwHgo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

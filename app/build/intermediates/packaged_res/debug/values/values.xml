@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="colorGray">#AEAEAE</color>
+    <color name="colorText">#1D1617</color>
+    <color name="ic_launcher_background">#323F83</color>
+    <color name="primaryColor">#FF92A3FD</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="app_name">BetaBank</string>
+    <string name="bottom_home">Home</string>
+    <string name="create_account">Create an Account</string>
+    <string name="email">Email</string>
+    <string name="first_name">First Name </string>
+    <string name="forgot_password">Forgot your password?</string>
+    <string name="gcm_defaultSenderId" translatable="false">575190013237</string>
+    <string name="go_to_login">Already have an account? Login</string>
+    <string name="google_api_key" translatable="false">AIzaSyCYFFMO9uqXA1wBwRwoz3xcToh9skSwHgo</string>
+    <string name="google_app_id" translatable="false">1:575190013237:android:2326fe2a16f8f1afec287c</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCYFFMO9uqXA1wBwRwoz3xcToh9skSwHgo</string>
+    <string name="google_storage_bucket" translatable="false">brobank-bf1f9.appspot.com</string>
+    <string name="hello">Hey there!</string>
+    <string name="hide_password">Hide password</string>
+    <string name="last_name">Last Name</string>
+    <string name="login">"Login"</string>
+    <string name="or">or</string>
+    <string name="password">Password</string>
+    <string name="project_id" translatable="false">brobank-bf1f9</string>
+    <string name="register">Register</string>
+    <string name="show_password">Show password</string>
+    <string name="terms_and_conditions">"By continuing you accept our Privacy Policy and Term of Use "</string>
+    <string name="terms_and_conditions_header">"Term of Use"</string>
+    <string name="welcome_back">Welcome back!</string>
+    <style name="Theme.BankningAppUI" parent="android:Theme.Material.Light.NoActionBar"/>
+</resources>

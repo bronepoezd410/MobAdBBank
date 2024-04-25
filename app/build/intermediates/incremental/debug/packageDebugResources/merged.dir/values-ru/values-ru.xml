@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">БетаБанк</string>
+    <string name="bottom_home">Главная</string>
+    <string name="create_account">Создать аккаунт</string>
+    <string name="email">Электронная почта</string>
+    <string name="first_name">Имя </string>
+    <string name="forgot_password">Forgot your password?</string>
+    <string name="go_to_login">Already have an account? Login</string>
+    <string name="hello">Привет</string>
+    <string name="hide_password">Hide password</string>
+    <string name="last_name">Фамилия</string>
+    <string name="login">"Логин"</string>
+    <string name="or">or</string>
+    <string name="password">Пароль</string>
+    <string name="register">Регистрация</string>
+    <string name="show_password">Show password</string>
+    <string name="terms_and_conditions">"By continuing you accept our Privacy Policy and Term of Use "</string>
+    <string name="terms_and_conditions_header">"Term of Use"</string>
+    <string name="welcome_back">Добро пожаловать снова!</string>
+</resources>
