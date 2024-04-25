@@ -92,8 +92,6 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.6.6")
     implementation("androidx.compose.ui:ui-tooling:1.6.6")
 
-    implementation("com.google.accompanist:accompanist-lottie:0.17.0")
-    implementation("com.airbnb.android:lottie:6.3.0")
 
 }
 

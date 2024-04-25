@@ -81,7 +81,7 @@ class CurrencyViewModel : ViewModel() {
 @Composable
 fun CurrenciesSection(viewModel: CurrencyViewModel) {
 
-//    viewModel.loadCurrencies("eb08453b2fdd44c5a4fbc1781ee0afae")
+    viewModel.loadCurrencies("eb08453b2fdd44c5a4fbc1781ee0afae")
     val currencies = viewModel.currencies // Получаем доступ к курсам валют через ViewModel
 
     var isVisible by remember {
