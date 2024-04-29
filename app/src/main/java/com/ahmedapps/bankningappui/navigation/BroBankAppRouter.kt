@@ -11,7 +11,7 @@ sealed class Screen(){
     object HomeScreen : Screen()
     object AccountPage : Screen()
     object WalletPage : Screen()
-
+    object TransactionsList : Screen()
 }
 
 

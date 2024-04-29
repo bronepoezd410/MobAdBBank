@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import com.ahmedapps.bankningappui.BottomNavigationBar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -60,7 +62,6 @@ fun WalletPage() {
             Log.e("Firestore", "Error getting user data: $e")
         }
     }
-
     Scaffold(
         bottomBar = {
             BottomNavigationBar(selectedIndex = 1)
@@ -196,10 +197,21 @@ fun DisplayUserCreditCards(currentUser: FirebaseUser) {
     ) {
         items(creditCards) { cardData ->
             val visibleState = remember { mutableStateOf(true) }
+            val amountState = remember { mutableStateOf(0) }
             AnimatedVisibility(
                 visible = visibleState.value,
-                enter = fadeIn(animationSpec = tween(durationMillis = 500, easing = LinearOutSlowInEasing)),
-                exit = fadeOut(animationSpec = tween(durationMillis = 500, easing = LinearOutSlowInEasing))
+                enter = fadeIn(
+                    animationSpec = tween(
+                        durationMillis = 500,
+                        easing = LinearOutSlowInEasing
+                    )
+                ),
+                exit = fadeOut(
+                    animationSpec = tween(
+                        durationMillis = 500,
+                        easing = LinearOutSlowInEasing
+                    )
+                )
             ) {
                 Card(
                     modifier = Modifier
@@ -218,52 +230,133 @@ fun DisplayUserCreditCards(currentUser: FirebaseUser) {
                         Text("Balance: $${"%.2f".format(cardData["moneyAmount"]?.toFloatOrNull() ?: 0.0f)}")
                         Text("Card Number: ${cardData["cardNumber"]}")
                         Text("Card Holder: ${cardData["cardHolder"]}")
-                        Button(
-                            onClick = {
-                                currentUser.let { user ->
-                                    db.collection("users").document(user.uid).collection("creditCards")
-                                        .whereEqualTo("cardNumber", cardData["cardNumber"])
-                                        .get()
-                                        .addOnSuccessListener { querySnapshot ->
-                                            for (document in querySnapshot.documents) {
-                                                document.reference.delete()
-                                            }
-                                        }
-                                        .addOnFailureListener { e ->
-                                            // Handle error
-                                        }
-                                }
-                            },
-                            modifier = Modifier.align(Alignment.Start)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Text("Delete")
+                            Button(
+                                onClick = {
+                                    // Уменьшаем баланс
+                                    val newAmount =
+                                        (cardData["moneyAmount"] as? String)?.toFloatOrNull()
+                                            ?.minus(amountState.value) ?: 0.0f
+                                    updateCardBalance(currentUser, db, cardData, newAmount)
+                                    addTransaction(currentUser, db, cardData["cardNumber"] ?: "", amountState.value.toFloat(), TransactionType.EXPENSE)
+                                }
+                            ) {
+                                Text("-")
+                            }
+                            TextField(
+                                value = amountState.value.toString(),
+                                onValueChange = {
+                                    amountState.value = it.toIntOrNull() ?: 0
+                                },
+                                modifier = Modifier.weight(1f)
+                            )
+                            Button(
+                                onClick = {
+                                    // Увеличиваем баланс
+                                    val newAmount =
+                                        (cardData["moneyAmount"] as? String)?.toFloatOrNull()
+                                            ?.plus(amountState.value) ?: 0.0f
+                                    updateCardBalance(currentUser, db, cardData, newAmount)
+                                    addTransaction(currentUser, db, cardData["cardNumber"] ?: "", amountState.value.toFloat(), TransactionType.INCOME)
+
+                                }
+                            ) {
+                                Text("+")
+                            }
+                            Button(
+                                onClick = {
+                                    // Удаляем карту
+                                    deleteCard(currentUser, db, cardData)
+                                }
+                            ) {
+                                Text("Delete")
+                            }
                         }
                     }
-
+                }
+            }
         }
-    }
-}
-        item {
-            Card(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
+            item {
+                Card(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
 
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 6.dp
-                ),
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.SpaceBetween // Расположение элементов между собой
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 6.dp
+                    ),
                 ) {
-                    Text("")
-                    Text("")
-                    Text("")
-                    Text("")
-                    Text("")
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.SpaceBetween // Расположение элементов между собой
+                    ) {
+                        Text("")
+                        Text("")
+                        Text("")
+                        Text("")
+                        Text("")
+                    }
                 }
             }
         }
     }
+
+fun updateCardBalance(currentUser: FirebaseUser, db: FirebaseFirestore, cardData: Map<String, String>, newAmount: Float) {
+    val cardNumber = cardData["cardNumber"]
+    if (cardNumber != null) {
+        db.collection("users").document(currentUser.uid).collection("creditCards")
+            .whereEqualTo("cardNumber", cardNumber)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot.documents) {
+                    document.reference.update("moneyAmount", newAmount)
+                        .addOnSuccessListener {
+                            // Успешно обновлено
+                        }
+                        .addOnFailureListener { e ->
+                            // Обработка ошибки
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                // Обработка ошибки
+            }
+    }
+}
+fun deleteCard(currentUser: FirebaseUser, db: FirebaseFirestore, cardData: Map<String, String>) {
+    db.collection("users").document(currentUser.uid).collection("creditCards")
+        .whereEqualTo("cardNumber", cardData["cardNumber"])
+        .get()
+        .addOnSuccessListener { querySnapshot ->
+            for (document in querySnapshot.documents) {
+                document.reference.delete()
+            }
+        }
+        .addOnFailureListener { e ->
+            // Обработка ошибки
+        }
+}
+fun addTransaction(currentUser: FirebaseUser, db: FirebaseFirestore, cardNumber: String, amount: Float, type: TransactionType) {
+    val transactionData = hashMapOf(
+        "cardNumber" to cardNumber,
+        "amount" to amount,
+        "type" to type.toString(),
+        "timestamp" to FieldValue.serverTimestamp() // Добавляем метку времени
+    )
+
+    db.collection("users").document(currentUser.uid).collection("transactions")
+        .add(transactionData)
+        .addOnSuccessListener { documentReference ->
+            // Успешно добавлено
+        }
+        .addOnFailureListener { e ->
+            // Обработка ошибки
+        }
+}
+enum class TransactionType {
+    INCOME, EXPENSE
 }

@@ -46,79 +46,39 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
-                    if(isUserLoggedIn.value == true){
-                        BroBankAppRouter.navigateTo(Screen.HomeScreen)
-                    }
+                    if(isUserLoggedIn.value == true){BroBankAppRouter.navigateTo(Screen.HomeScreen)}
                     Crossfade (targetState  = BroBankAppRouter.currentScreen,
                         label = ""
                     ) { currentState->
-                        when(currentState.value){
-                            
-                            is Screen.SignUp-> {
-                                SignUp()
-                            }
-                            is Screen.TermsAndConditionsScreen -> {
-                                TermsAndConditionsScreen()
-                            }
-                            is Screen.LoginScreen -> {
-                                LoginScreen()
-                            }
-                            is Screen.HomeScreen -> {
-                                HomeScreen()
-                            }
-                            is Screen.AccountPage -> {
-                                AccountPage()
-                            }
-                            is Screen.WalletPage -> {
-                                WalletPage()
-                            }
-
+                        when(currentState.value){is Screen.SignUp-> {SignUp()}
+                            is Screen.TermsAndConditionsScreen -> {TermsAndConditionsScreen()}
+                            is Screen.LoginScreen -> {LoginScreen()}
+                            is Screen.HomeScreen -> {HomeScreen()}
+                            is Screen.AccountPage -> {AccountPage()}
+                            is Screen.WalletPage -> {WalletPage()}
                             else -> {}
-                        }
-                    }
-                }
-            }
-        }
-
-    }
+                        }}}}}}
     override fun onStart() {
         super.onStart()
-        checkForActiveSession()
-    }
+        checkForActiveSession()}
     val isUserLoggedIn : MutableLiveData<Boolean> = MutableLiveData()
-
     fun checkForActiveSession(){
         if(FirebaseAuth.getInstance().currentUser != null){
             Log.d(ContentValues.TAG, "Valid Session")
             isUserLoggedIn.value = true
             Log.d(ContentValues.TAG, FirebaseAuth.getInstance().currentUser.toString())
-
         } else {
             Log.d(ContentValues.TAG, "User is not logged in")
-            isUserLoggedIn.value = false
-
-        }
-    }
-
-
+            isUserLoggedIn.value = false}}
     @Composable
     private fun SetBarColor(color: Color) {
         val systemUiController = rememberSystemUiController()
         SideEffect {
             systemUiController.setSystemBarsColor(
                 color = color
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview
+            )        }    }}
 @Composable
 fun HomeScreen() {
-
-
     Scaffold(
         bottomBar = {
             BottomNavigationBar(selectedIndex = 0)
@@ -129,23 +89,15 @@ fun HomeScreen() {
                 .fillMaxSize()
                 .padding(padding)
         ) {
-
         WalletSection()
         CardsSection()
         Spacer(modifier = Modifier.height(16.dp))
-
             FinanceSection()
-
             val viewModel: CurrencyViewModel = viewModel()
             CurrenciesSection(viewModel = viewModel)
             SystemBackButtonHandler (){
                 BroBankAppRouter.navigateTo(Screen.HomeScreen)
-            }
-        }
-
-
-    }
-}
+            }}}}
 
 
 

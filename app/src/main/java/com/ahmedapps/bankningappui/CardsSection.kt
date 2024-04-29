@@ -86,10 +86,10 @@ fun CardsSection() {
                         cardData.mapValues { it.value.toString() }
                     }
 
-                    }
                 }
             }
         }
+    }
 
 
     LazyRow {
@@ -160,32 +160,3 @@ fun CardItem(
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
