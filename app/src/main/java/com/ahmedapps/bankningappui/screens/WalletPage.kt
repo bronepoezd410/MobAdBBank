@@ -237,7 +237,6 @@ fun DisplayUserCreditCards(currentUser: FirebaseUser) {
                         ) {
                             Button(
                                 onClick = {
-                                    // Уменьшаем баланс
                                     val newAmount =
                                         (cardData["moneyAmount"] as? String)?.toFloatOrNull()
                                             ?.minus(amountState.value) ?: 0.0f
@@ -345,7 +344,7 @@ fun addTransaction(currentUser: FirebaseUser, db: FirebaseFirestore, cardNumber:
         "cardNumber" to cardNumber,
         "amount" to amount,
         "type" to type.toString(),
-        "timestamp" to FieldValue.serverTimestamp() // Добавляем метку времени
+        "timestamp" to FieldValue.serverTimestamp()
     )
 
     db.collection("users").document(currentUser.uid).collection("transactions")

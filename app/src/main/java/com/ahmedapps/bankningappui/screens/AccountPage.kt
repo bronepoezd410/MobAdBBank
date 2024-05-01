@@ -57,9 +57,7 @@ fun AccountPage() {
         }
     }
 
-// Обработчик для кнопки "Сохранить"
     val onSaveClicked = {
-        // Обновляем информацию о пользователе в базе данных Firestore
         val userId = FirebaseAuth.getInstance().currentUser?.uid
         if (userId != null) {
             val userDocument = FirebaseFirestore.getInstance().collection("users").document(userId)
